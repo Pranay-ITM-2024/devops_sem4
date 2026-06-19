@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_USER = 'yourusername'
         IMAGE_TAG = "${BUILD_NUMBER}"
+        PATH = "/var/jenkins_home/.local/bin:${env.PATH}"
     }
 
     stages {
@@ -30,8 +31,12 @@ pipeline {
         stage('Run E2E API Tests (Node/Jest)') {
             steps {
                 sh 'cd e2e-tests && npm install'
-                // E2E tests require a live API server - marked non-blocking in CI
-                sh 'cd e2e-tests && npm test || true'
+                // Start API and DB using docker-compose to run tests against
+                sh 'docker-compose up -d db api'
+                sh 'sleep 10' // wait for db and api to be ready
+                // Pass host.docker.internal as API_URL so Jenkins can reach the host-bound port
+                sh 'cd e2e-tests && API_URL=http://host.docker.internal:8000 npm test || true'
+                sh 'docker-compose down'
             }
         }
 
