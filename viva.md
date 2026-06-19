@@ -104,3 +104,27 @@ During the viva, if they ask "What command do you use to do X?", use this refere
 ### Jenkins Commands (Inside Jenkinsfile)
 * `kubectl set image deployment/fastapi-backend fastapi=yourimage:v2`
   * **What it does:** This is the CD (Continuous Deployment) command. It tells Kubernetes to swap out the old version of your code with the newly built Docker image tag, triggering a rolling update.
+
+---
+
+## 🧠 8. General DevOps Viva Questions
+
+**Q: Explain CI/CD.**
+> **Answer:** Continuous Integration (CI) is the practice of automating the integration of code changes from multiple contributors into a single software project. It involves automatically building and testing the code. Continuous Deployment (CD) automatically deploys the integrated code to production (or staging) environments, ensuring fast, reliable releases.
+
+**Q: What is Infrastructure as Code (IaC) and why is it important?**
+> **Answer:** IaC is managing and provisioning computing infrastructure through machine-readable definition files (like Terraform scripts) rather than physical hardware configuration or interactive configuration tools. It ensures consistency, speeds up deployments, allows infrastructure to be version-controlled in Git, and prevents configuration drift.
+
+**Q: What is the difference between Docker and a Virtual Machine (VM)?**
+> **Answer:** A VM includes a full copy of an operating system, the application, necessary binaries, and libraries, taking up tens of GBs and being slow to start. Docker containers share the host machine's OS kernel and only contain the application and its direct dependencies, making them lightweight, fast to start, and portable.
+
+**Q: What is Blue/Green Deployment vs. Rolling Update?**
+> **Answer:** 
+> * **Rolling Update:** Gradually replaces old instances of an application with new ones, ensuring at least some instances are always available. (This is what Kubernetes does by default).
+> * **Blue/Green Deployment:** Runs two identical production environments. Only one is live at a time. The new version is deployed to the idle environment (Green). Once tested, traffic is switched over from Blue to Green instantly.
+
+**Q: What is the "Shift Left" principle in DevOps?**
+> **Answer:** "Shift Left" means moving testing, security, and quality checks earlier in the software development lifecycle (to the "left" on a project timeline). In this project, running `bandit` for security scanning during the Jenkins pipeline (before Docker build or deployment) is an example of shifting left.
+
+**Q: Explain GitOps.**
+> **Answer:** GitOps is an operational framework that takes DevOps best practices used for application development (like version control, collaboration, compliance, and CI/CD) and applies them to infrastructure automation. In GitOps, Git is the single source of truth for the system's desired state.
