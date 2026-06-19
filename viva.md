@@ -91,13 +91,15 @@ During the viva, if they ask "What command do you use to do X?", use this refere
 * `kubectl rollout undo deployment/fastapi-backend -n soc-app`  
   * **What it does:** If a bad update was deployed, this instantly rolls the application back to the previous working version with zero downtime.
 
-### Terraform Commands
+### Terraform Commands & Concepts
+* **What are Terraform Modules?**
+  * **Answer:** Modules are containers for multiple resources that are used together. In this project, I broke the infrastructure into a `network` module (for the Docker bridge network) and a `compute` module (for the app containers). This makes the code reusable, organized, and much closer to enterprise standards!
 * `terraform init`  
-  * **What it does:** Downloads the necessary plugins (like the AWS or Docker provider) so Terraform knows how to talk to the cloud.
+  * **What it does:** Downloads the necessary plugins (like the Docker provider) so Terraform knows how to talk to the environment.
 * `terraform plan`  
   * **What it does:** Shows a "dry run" of exactly what infrastructure Terraform is *going* to create or delete, before it actually does it.
-* `terraform apply`  
-  * **What it does:** Actually executes the plan and provisions the servers, databases, or networks in the cloud.
+* `terraform apply -auto-approve`  
+  * **What it does:** Actually executes the plan and provisions the containers and networks automatically.
 
 ### Jenkins Commands (Inside Jenkinsfile)
 * `kubectl set image deployment/fastapi-backend fastapi=yourimage:v2`

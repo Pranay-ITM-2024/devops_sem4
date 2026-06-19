@@ -1,7 +1,11 @@
-variable "db_user" {
-  description = "PostgreSQL username"
+variable "network_name" {
+  description = "Docker network name"
   type        = string
-  default     = "socuser"
+}
+
+variable "db_user" {
+  description = "PostgreSQL user"
+  type        = string
 }
 
 variable "db_password" {
@@ -13,29 +17,28 @@ variable "db_password" {
 variable "db_name" {
   description = "PostgreSQL database name"
   type        = string
-  default     = "soc_db"
 }
 
 variable "db_port" {
-  description = "PostgreSQL external port"
+  description = "PostgreSQL port"
   type        = number
   default     = 5432
 }
 
 variable "api_port" {
-  description = "API external port"
+  description = "API port"
   type        = number
   default     = 8000
 }
 
 variable "dashboard_port" {
-  description = "Dashboard external port"
+  description = "Dashboard port"
   type        = number
   default     = 5001
 }
 
 variable "image_tag" {
-  description = "Docker image tag for services"
+  description = "Docker image tag for the app services"
   type        = string
   default     = "8"
 }

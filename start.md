@@ -4,23 +4,26 @@ This guide is written in simple, plain English to help you start your app on you
 
 ---
 
-## 🟢 Part 1: How to Start the App (The Easy Way)
+## 🟢 Part 1: How to Start the App (The DevOps Way)
 
-The easiest way to start the whole platform (the dashboard, the API, the simulator, and the database) is to use **Docker**. 
+The most impressive way to start the whole platform (the dashboard, the API, the simulator, and the database) for your exam is to use **Terraform**. This shows you know Infrastructure-as-Code (IaC)!
 
 ### Step 1: Open your Terminal
-Open the Terminal app on your Mac and go to the project folder:
+Open the Terminal app on your Mac and go to the project's terraform folder:
 ```bash
-cd ~/Desktop/DEVOPS
+cd ~/Desktop/DEVOPS/terraform
 ```
 
-### Step 2: Start everything with Docker
-Copy and paste this command and hit Enter:
+### Step 2: Start everything with Terraform
+Run these commands to provision your local infrastructure:
 ```bash
-docker compose up -d --build
+terraform init
+terraform apply -auto-approve
 ```
-* **What this does:** It builds the app into little virtual boxes (containers) and turns them all on in the background (`-d` means detached).
-* **Wait a minute:** It might take 1-2 minutes to download everything the first time.
+* **What this does:** Terraform reads your modular configuration (network and compute modules), provisions a custom Docker network, and securely deploys your database, backend, dashboard, and simulator as containers.
+* **Wait a minute:** It might take a few seconds to start up. If it's your first time, it might download the Postgres image.
+
+*(Note: If you just want a quick start without Terraform, you can still run `docker-compose up -d --build` from the `~/Desktop/DEVOPS` folder instead!)*
 
 ### Step 3: Check if it's running
 Run this command to see your containers:
@@ -64,12 +67,14 @@ Now that it's running, let's open it in your web browser!
 When you are finished testing and want to close the app so it stops using your computer's memory:
 
 1. Go back to your Terminal.
-2. Make sure you are in the `~/Desktop/DEVOPS` folder.
+2. Make sure you are in the `~/Desktop/DEVOPS/terraform` folder.
 3. Run this command:
 ```bash
-docker compose down
+terraform destroy -auto-approve
 ```
-* **What this does:** It safely shuts down and deletes the running containers (but don't worry, your code is perfectly safe!).
+* **What this does:** Terraform will look at the current state and cleanly destroy the network and containers it created.
+
+*(If you used Docker Compose earlier, run `docker compose down` from the `~/Desktop/DEVOPS` folder instead.)*
 
 ---
 

@@ -6,8 +6,8 @@ This document is your "script" for demonstrating the project during your exam. I
 
 ## 🎬 Pre-Flight Checklist (Before the presentation)
 1. Make sure Docker Desktop is running (the whale icon is in your menu bar).
-2. Open your terminal in the `DEVOPS` folder.
-3. Start the app: `docker compose up -d --build`
+2. Open your terminal in the `DEVOPS/terraform` folder.
+3. Start the app using your IaC: `terraform apply -auto-approve`
 4. Wait 1 minute so the "Simulator" has time to generate a few fake alerts.
 
 ---
@@ -59,4 +59,4 @@ After showing the app working, you switch to explaining *how* it's hosted.
 
 ## 🏁 Finishing the Demo
 * **What to say:** *"In conclusion, this project demonstrates not just a functional business application, but a highly available, automated, and secure deployment pipeline capable of handling enterprise-scale traffic."*
-* **Action:** Go to your terminal and type `docker compose down` to cleanly shut everything off.
+* **Action:** Go to your terminal and type `terraform destroy -auto-approve` to cleanly shut everything off.
