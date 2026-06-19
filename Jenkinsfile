@@ -16,14 +16,14 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r api/requirements.txt'
-                sh 'pip install -r app/requirements.txt'
+                sh 'pip3 install -r api/requirements.txt'
+                sh 'pip3 install -r app/requirements.txt'
             }
         }
 
         stage('Run Unit Tests (Python)') {
             steps {
-                sh 'cd api && python -m pytest tests/ -v --tb=short'
+                sh 'cd api && python3 -m pytest tests/ -v --tb=short'
             }
         }
 
@@ -36,14 +36,14 @@ pipeline {
 
         stage('Code Lint') {
             steps {
-                sh 'pip install flake8'
+                sh 'pip3 install flake8'
                 sh 'flake8 api/ --max-line-length=120 --exclude=__pycache__ || true'
             }
         }
 
         stage('Security Scan') {
             steps {
-                sh 'pip install bandit'
+                sh 'pip3 install bandit'
                 sh 'bandit -r api/ -f json -o bandit-report.json || true'
                 sh 'echo "Security scan complete"'
             }
