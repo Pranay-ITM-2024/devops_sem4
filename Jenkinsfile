@@ -34,8 +34,8 @@ pipeline {
                 // Start API and DB using docker-compose to run tests against
                 sh 'docker-compose up -d db api'
                 sh 'sleep 10' // wait for db and api to be ready
-                // Pass host.docker.internal as API_URL so Jenkins can reach the host-bound port
-                sh 'cd e2e-tests && API_URL=http://host.docker.internal:8000 npm test || true'
+                // Pass host.docker.internal/api as API_URL so Jenkins can reach the host-bound port
+                sh 'cd e2e-tests && API_URL=http://host.docker.internal:8000/api npm test || true'
                 sh 'docker-compose down'
             }
         }
