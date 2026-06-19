@@ -16,8 +16,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install -r api/requirements.txt'
-                sh 'pip3 install -r app/requirements.txt'
+                sh 'pip3 install --break-system-packages -r api/requirements.txt'
+                sh 'pip3 install --break-system-packages -r app/requirements.txt'
             }
         }
 
@@ -36,14 +36,14 @@ pipeline {
 
         stage('Code Lint') {
             steps {
-                sh 'pip3 install flake8'
+                sh 'pip3 install --break-system-packages flake8'
                 sh 'flake8 api/ --max-line-length=120 --exclude=__pycache__ || true'
             }
         }
 
         stage('Security Scan') {
             steps {
-                sh 'pip3 install bandit'
+                sh 'pip3 install --break-system-packages bandit'
                 sh 'bandit -r api/ -f json -o bandit-report.json || true'
                 sh 'echo "Security scan complete"'
             }
