@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.db
+.pytest_cache/
+venv/
+.idea/
+.vscode/
+*.egg-info/
+dist/
+build/
+terraform/.terraform/
+terraform/*.tfstate*
+.DS_Store
+node_modules/

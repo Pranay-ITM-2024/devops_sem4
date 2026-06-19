@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}SOC Dashboard — Alerts{% endblock %}
+{% block content %}
+
+<!-- ── Summary Stats Cards ────────────────────────────── -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card stat-card border-info">
+            <div class="card-body text-center">
+                <h2 class="mb-0">{{ stats.total_alerts }}</h2>
+                <small class="text-muted">Total Alerts</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card border-danger">
+            <div class="card-body text-center">
+                <h2 class="mb-0 text-danger">{{ stats.open_alerts }}</h2>
+                <small class="text-muted">Open</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card border-warning">
+            <div class="card-body text-center">
+                <h2 class="mb-0 text-warning">{{ stats.in_progress_alerts }}</h2>
+                <small class="text-muted">In Progress</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card border-success">
+            <div class="card-body text-center">
+                <h2 class="mb-0 text-success">{{ stats.closed_alerts }}</h2>
+                <small class="text-muted">Closed</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Severity Breakdown ─────────────────────────────── -->
+<div class="row g-3 mb-4">
+    <div class="col-3">
+        <div class="severity-badge bg-danger bg-opacity-25 text-center rounded p-2">
+            <strong>{{ stats.critical_count }}</strong> <small>Critical</small>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="severity-badge bg-warning bg-opacity-25 text-center rounded p-2">
+            <strong>{{ stats.high_count }}</strong> <small>High</small>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="severity-badge bg-info bg-opacity-25 text-center rounded p-2">
+            <strong>{{ stats.medium_count }}</strong> <small>Medium</small>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="severity-badge bg-secondary bg-opacity-25 text-center rounded p-2">
+            <strong>{{ stats.low_count }}</strong> <small>Low</small>
+        </div>
+    </div>
+</div>
+
+<!-- ── Filters ────────────────────────────────────────── -->
+<div class="card mb-3 border-secondary">
+    <div class="card-body py-2">
+        <form method="GET" class="d-flex gap-2 align-items-center flex-wrap">
+            <i class="bi bi-funnel text-muted"></i>
+            <select name="severity" class="form-select form-select-sm w-auto">
+                <option value="">All Severities</option>
+                <option value="critical" {% if current_severity=='critical' %}selected{% endif %}>🔴 Critical</option>
+                <option value="high" {% if current_severity=='high' %}selected{% endif %}>🟠 High</option>
+                <option value="medium" {% if current_severity=='medium' %}selected{% endif %}>🟡 Medium</option>
+                <option value="low" {% if current_severity=='low' %}selected{% endif %}>🔵 Low</option>
+            </select>
+            <select name="status" class="form-select form-select-sm w-auto">
+                <option value="">All Statuses</option>
+                <option value="open" {% if current_status=='open' %}selected{% endif %}>Open</option>
+                <option value="in_progress" {% if current_status=='in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="closed" {% if current_status=='closed' %}selected{% endif %}>Closed</option>
+            </select>
+            <button type="submit" class="btn btn-sm btn-outline-info">Apply</button>
+            <a href="/" class="btn btn-sm btn-outline-secondary">Clear</a>
+        </form>
+    </div>
+</div>
+
+<!-- ── Alert Table ────────────────────────────────────── -->
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Severity</th>
+                <th>Title</th>
+                <th>Source</th>
+                <th>Source IP</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if alerts %}
+                {% for alert in alerts %}
+                <tr>
+                    <td><strong>#{{ alert.id }}</strong></td>
+                    <td>
+                        {% if alert.severity == 'critical' %}<span class="badge bg-danger">CRITICAL</span>
+                        {% elif alert.severity == 'high' %}<span class="badge bg-warning text-dark">HIGH</span>
+                        {% elif alert.severity == 'medium' %}<span class="badge bg-info text-dark">MEDIUM</span>
+                        {% else %}<span class="badge bg-secondary">LOW</span>{% endif %}
+                    </td>
+                    <td><a href="/alert/{{ alert.id }}" class="alert-link">{{ alert.title }}</a></td>
+                    <td><small>{{ alert.source or '—' }}</small></td>
+                    <td><code>{{ alert.source_ip or '—' }}</code></td>
+                    <td><small>{{ alert.alert_type or '—' }}</small></td>
+                    <td>
+                        {% if alert.status == 'open' %}<span class="badge bg-danger">Open</span>
+                        {% elif alert.status == 'in_progress' %}<span class="badge bg-warning text-dark">In Progress</span>
+                        {% else %}<span class="badge bg-success">Closed</span>{% endif %}
+                    </td>
+                    <td><small>{{ alert.created_at[:16] if alert.created_at else '—' }}</small></td>
+                    <td>
+                        <form method="POST" action="/alert/{{ alert.id }}/triage" class="d-inline">
+                            {% if alert.status == 'open' %}
+                            <button name="action" value="acknowledge" class="btn btn-sm btn-outline-warning" title="Acknowledge">
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                            {% endif %}
+                            {% if alert.status != 'closed' %}
+                            <button name="action" value="close" class="btn btn-sm btn-outline-success" title="Close">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-4">
+                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                        No alerts found. The simulator will generate some soon.
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

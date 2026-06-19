@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: soc_db
+    environment:
+      POSTGRES_USER: socuser
+      POSTGRES_PASSWORD: socpass123
+      POSTGRES_DB: soc_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U socuser -d soc_db"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
+  api:
+    build: ./api
+    container_name: soc_api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "postgresql://socuser:socpass123@db:5432/soc_db"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  dashboard:
+    build: ./app
+    container_name: soc_dashboard
+    ports:
+      - "5001:5000"
+    environment:
+      API_URL: "http://api:8000"
+      FLASK_SECRET: "dev-secret-key-change-me"
+    depends_on:
+      - api
+
+  simulator:
+    build: ./simulator
+    container_name: soc_simulator
+    environment:
+      API_URL: "http://api:8000"
+      INTERVAL_SECONDS: "30"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

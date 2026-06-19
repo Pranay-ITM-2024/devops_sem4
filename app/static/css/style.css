@@ -1,0 +1,93 @@
+/* SOC Dashboard — Custom Styles */
+
+:root {
+    --bg-primary: #0f0f1a;
+    --bg-card: #1a1a2e;
+    --accent-blue: #7dd3fc;
+    --accent-pink: #f472b6;
+}
+
+body {
+    background-color: var(--bg-primary);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--bg-card) !important;
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+}
+
+/* Stat cards */
+.stat-card {
+    background-color: var(--bg-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Cards */
+.card {
+    background-color: var(--bg-card);
+}
+
+/* Severity badges */
+.severity-badge {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.15s ease;
+}
+
+.severity-badge:hover {
+    transform: scale(1.03);
+}
+
+/* Table */
+.table-dark {
+    --bs-table-bg: var(--bg-card);
+}
+
+.alert-link {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.alert-link:hover {
+    text-decoration: underline;
+    color: #bae6fd;
+}
+
+code {
+    color: var(--accent-pink);
+    font-size: 0.85em;
+}
+
+/* Buttons */
+.btn-outline-danger:hover,
+.btn-outline-warning:hover,
+.btn-outline-info:hover,
+.btn-outline-success:hover {
+    transform: translateY(-1px);
+}
+
+/* Footer */
+footer {
+    color: #555;
+}
+
+/* Empty state */
+.bi.fs-1 {
+    opacity: 0.3;
+}
